@@ -241,7 +241,57 @@ if st.button("🔍 Найти авиабилеты", type="primary"):
             st.error(f"Произошла ошибка: {e}")
 
 st.divider()
+st.divider()
+st.header("📈 История цен")
 
+try:
+    history = pd.read_csv(HISTORY_FILE)
+
+    if not history.empty:
+        st.write("Здесь отображаются цены, сохранённые при предыдущих поисках.")
+
+        routes = (
+            history["Откуда"] + " — " + history["Куда"]
+        ).unique()
+
+        selected_route = st.selectbox(
+            "Выберите маршрут для просмотра истории",
+            routes
+        )
+
+        route_history = history[
+            history["Откуда"] + " — " + history["Куда"]
+            == selected_route
+        ].copy()
+
+        route_history["Дата поиска"] = pd.to_datetime(
+            route_history["Дата поиска"]
+        )
+
+        airlines = route_history["Авиакомпания"].unique()
+
+        selected_airline = st.selectbox(
+            "Выберите авиакомпанию",
+            airlines
+        )
+
+        chart_data = route_history[
+            route_history["Авиакомпания"] == selected_airline
+        ]
+
+        chart_data = chart_data.sort_values("Дата поиска")
+
+        st.line_chart(
+            chart_data.set_index("Дата поиска")["Цена"]
+        )
+
+        st.dataframe(chart_data, use_container_width=True)
+
+    else:
+        st.info("История цен пока пуста.")
+
+except FileNotFoundError:
+    st.info("История цен пока пуста. Выполните первый поиск авиабилетов.")
 st.markdown(
     "<center>AviaSaver © 2026 | Учебный проект</center>",
     unsafe_allow_html=True
