@@ -11,18 +11,29 @@ st.markdown("""
 <style>
 .stApp {
     background-color: #F4F8FC;
+    color: #243447;
+}
+.stApp p, .stApp label, .stApp span,
+.stApp div, .stApp h1, .stApp h2,
+.stApp h3 {
+    color: #243447;
 }
 h1 {
-    color: #1769AA;
+    color: #1769AA !important;
     text-align: center;
 }
 .subtitle {
     text-align: center;
-    color: #526579;
+    color: #526579 !important;
     font-size: 18px;
+}
+[data-baseweb="input"] input {
+    color: #243447 !important;
 }
 </style>
 """, unsafe_allow_html=True)
+
+
 
 st.title("✈️ AviaSaver")
 st.markdown(
