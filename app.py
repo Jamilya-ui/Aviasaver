@@ -3,6 +3,34 @@ import pandas as pd
 import requests
 from datetime import date, datetime
 
+HISTORY_FILE = "price_history.csv"
+
+def save_price_history(flights, origin, destination, flight_date):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    history = []
+
+    for _, row in flights.iterrows():
+        history.append({
+            "Дата поиска": now,
+            "Откуда": origin,
+            "Куда": destination,
+            "Дата вылета": str(flight_date),
+            "Авиакомпания": row["Авиакомпания"],
+            "Цена": row["Цена"],
+            "Валюта": row["Валюта"]
+        })
+
+    new_data = pd.DataFrame(history)
+
+    try:
+        old_data = pd.read_csv(HISTORY_FILE)
+        new_data = pd.concat([old_data, new_data], ignore_index=True)
+    except FileNotFoundError:
+        pass
+
+    new_data.to_csv(HISTORY_FILE, index=False)
+
 st.set_page_config(
     page_title="AviaSaver",
     page_icon="✈️",
