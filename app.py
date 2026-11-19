@@ -118,7 +118,7 @@ if st.button("🔍 Найти авиабилеты", type="primary"):
                     timeout=60
                 )
 
-            if response.status_code == 200:
+            if response.status_code in (200, 201):
                 result = response.json()
                 offers = result.get("data", {}).get("offers", [])
 
