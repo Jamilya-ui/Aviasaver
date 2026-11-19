@@ -194,6 +194,8 @@ if st.button("🔍 Найти авиабилеты", type="primary"):
 
                     df = pd.DataFrame(flights)
                     df = df.sort_values("Цена")
+                    save_price_history(df, origin_name, destination_name, flight_date)
+
 
                     st.subheader("✈️ Найденные предложения")
                     st.dataframe(df, use_container_width=True)
